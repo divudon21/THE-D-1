@@ -1,0 +1,5 @@
+{
+  "name": "IPTV Player",
+  "description": "A simple IPTV player that loads and plays M3U playlists.",
+  "requestFramePermissions": []
+}
