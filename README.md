@@ -1,20 +1,59 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# IPTV Player
 
-# Run and deploy your AI Studio app
+A modern, web-based IPTV player built with React, Vite, and Tailwind CSS.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/2bd64687-b177-4667-98f7-eb594c124448
+- 📺 **M3U Playlist Support**: Parse and play standard M3U playlists.
+- 🚀 **Fast & Responsive**: Built with Vite and optimized for performance.
+- 📱 **PWA Support**: Installable as an app on mobile and desktop.
+- 🔍 **Search & Filter**: Easily find channels by name or group.
+- 🛠 **Proxy & Direct Modes**:
+  - **Direct Mode**: Connects directly to streams (requires CORS extension or CORS-enabled streams).
+  - **Proxy Mode**: Routes traffic through a backend proxy to bypass CORS (requires running the backend server).
 
-## Run Locally
+## How to Run Locally
 
-**Prerequisites:**  Node.js
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/yourusername/iptv-player.git
+    cd iptv-player
+    ```
 
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+3.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+    This starts both the frontend and the backend proxy server.
+
+## Deployment
+
+### Static Hosting (GitHub Pages, Vercel, Netlify)
+
+If you deploy only the frontend (e.g., to GitHub Pages), the **Proxy Mode will not work** because the backend server (`server.ts`) cannot run on static hosting.
+
+**To use on Static Hosting:**
+1.  Uncheck the **"PROXY"** checkbox in the app.
+2.  Install a **"Allow CORS"** browser extension (e.g., in Chrome, Edge, or Kiwi Browser on Android).
+3.  This allows the browser to fetch streams directly from the source.
+
+### Full Stack Hosting (Render, Railway, Heroku)
+
+To use the **Proxy Mode** without browser extensions, you must deploy the full app (Frontend + Backend) to a service that supports Node.js.
+
+## Technologies
+
+-   [React](https://react.dev/)
+-   [Vite](https://vitejs.dev/)
+-   [Tailwind CSS](https://tailwindcss.com/)
+-   [React Player](https://github.com/cookpete/react-player)
+-   [Express](https://expressjs.com/) (for Proxy Server)
+
+## License
+
+MIT

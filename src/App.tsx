@@ -85,22 +85,24 @@ export default function App() {
     setVisibleCount(ITEMS_PER_PAGE);
     
     try {
-      // If proxy is manually checked, skip direct fetch
+      // If proxy is manually checked, use public proxy (corsproxy.io)
       let response;
       if (useProxy) {
-          response = await fetch(`/api/proxy?url=${encodeURIComponent(playlistUrl)}`);
+          // Use a public proxy that supports video streaming better than others
+          // Note: Public proxies cannot handle IP-locked streams
+          response = await fetch(`https://corsproxy.io/?${encodeURIComponent(playlistUrl)}`);
       } else {
-          // Try fetching directly (Critical for IP-locked streams)
+          // Try fetching directly (Required for IP-locked streams with Extension)
           try {
             response = await fetch(playlistUrl);
           } catch (directError) {
             console.error("Direct fetch failed:", directError);
             throw new Error(
-                'Direct fetch failed. This is likely a CORS issue.\n\n' +
-                'For IP-LOCKED streams:\n' +
-                '1. Keep "PROXY" unchecked.\n' +
-                '2. You MUST install a "Allow CORS" browser extension.\n' +
-                '3. Ensure the link is HTTPS (Mixed Content cannot be played directly).'
+                'Direct fetch failed.\n\n' +
+                'For IP-LOCKED streams (Your Case):\n' +
+                '1. Uncheck "Public Proxy".\n' +
+                '2. Ensure your "Allow CORS" extension is ON.\n' +
+                '3. Reload the page.'
             );
           }
       }
@@ -210,7 +212,7 @@ export default function App() {
                   onChange={(e) => setPlaylistUrl(e.target.value)}
                   className="w-full bg-zinc-800/50 text-sm rounded-full px-4 py-2 border border-zinc-700 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all placeholder:text-zinc-500 pr-24"
                 />
-                <label className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 cursor-pointer group" title="Force Proxy (Fix CORS/HTTP)">
+                <label className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 cursor-pointer group" title="Public Proxy (Not for IP-locked)">
                   <input 
                     type="checkbox" 
                     checked={useProxy} 
@@ -271,10 +273,10 @@ export default function App() {
                         lowLatencyMode: true,
                         backBufferLength: 90,
                         xhrSetup: function(xhr: XMLHttpRequest, url: string) {
-                          // Proxy all HLS requests through our backend to bypass CORS/Mixed Content
+                          // Proxy all HLS requests through public proxy if enabled
                           // Only proxy if it's an external URL (http/https) AND proxy mode is enabled
                           if (useProxy && url.startsWith('http')) {
-                            xhr.open('GET', `/api/proxy?url=${encodeURIComponent(url)}`, true);
+                            xhr.open('GET', `https://corsproxy.io/?${encodeURIComponent(url)}`, true);
                           }
                         }
                       }
